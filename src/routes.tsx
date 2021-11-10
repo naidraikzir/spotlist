@@ -24,7 +24,7 @@ const routes: AppRouteProps[] = [
   },
   {
     path: '*',
-    element: <Navigate to="/" />
+    element: <Login />
   }
 ]
 

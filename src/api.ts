@@ -7,11 +7,25 @@ const request = axios.create({
 request.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
-    Authorization: `Bearer ${localStorage.getItem('token')}`
+    Authorization: `Bearer ${localStorage.getItem('access_token')}`
   }
   return config
 })
 
-const api = {}
+request.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      localStorage.clear()
+      window.location.reload()
+    }
+    return error
+  }
+)
+
+const api = {
+  me: () => request.get('/me'),
+  playlists: () => request.get('/me/playlists')
+}
 
 export default api

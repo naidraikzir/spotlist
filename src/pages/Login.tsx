@@ -1,54 +1,44 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import spotify from '@/spotify.png'
+import { authUrl, clientId, redirectUri, scopes } from '@/config'
 
 function Login() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
-  function login(e) {
-    e.preventDefault()
-  }
+  useEffect(() => {
+    if (window.location.hash) {
+      const hash = window.location.hash
+        .substring(1)
+        .split('&')
+        .reduce((obj, item) => {
+          if (item) {
+            const parts = item.split('=')
+            obj[parts[0]] = decodeURIComponent(parts[1])
+          }
+          return obj
+        }, {})
+
+      if (hash.access_token) {
+        localStorage.setItem('access_token', hash.access_token)
+        navigate('/profile')
+      }
+    }
+  }, [])
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <form
-        className="flex flex-col bg-white w-[400px] shadow-xl p-8 m-4"
-        onSubmit={login}
+      <a
+        href={`${authUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token&show_dialog=true`}
+        className="bg-green-500 text-black text-2xl font-bold px-8 py-4 cursor-pointer text-center"
       >
-        <label
-          htmlFor="username"
-          className="block mb-2 font-bold"
-        >
-          Username
-        </label>
-        <input
-          type="text"
-          id="username"
-          placeholder="username"
-          className="block w-full px-4 py-2 border border-gray-300 mb-4"
-          onChange={(e) => setUsername(e.target.value)}
+        <img
+          src={spotify}
+          alt="Spotify"
+          className="inline mr-4 w-14"
         />
-
-        <label
-          htmlFor="password"
-          className="block mb-2 font-bold"
-        >
-          Password
-        </label>
-        <input
-          type="text"
-          id="password"
-          placeholder="password"
-          className="block w-full px-4 py-2 border border-gray-300 mb-4"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button
-          type="submit"
-          className="bg-green-300 font-bold px-8 py-2 mt-4 ml-auto"
-        >
-          Login
-        </button>
-      </form>
+        Login To Spotify
+      </a>
     </div>
   )
 }
