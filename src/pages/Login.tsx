@@ -1,12 +1,18 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import spotify from '@/spotify.png'
+import api from '@/api'
 import { authUrl, clientId, redirectUri, scopes } from '@/config'
 
 function Login() {
   const navigate = useNavigate()
 
-  useEffect(() => {
+  async function fetchMe() {
+    const { data } = await api.me()
+    localStorage.setItem('me', JSON.stringify(data))
+  }
+
+  useEffect(async () => {
     if (window.location.hash) {
       const hash = window.location.hash
         .substring(1)
@@ -21,6 +27,7 @@ function Login() {
 
       if (hash.access_token) {
         localStorage.setItem('access_token', hash.access_token)
+        await fetchMe()
         navigate('/profile')
       }
     }

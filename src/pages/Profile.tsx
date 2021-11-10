@@ -11,11 +11,6 @@ function Profile() {
   })
   const [playlists, setPlaylists] = useState([])
 
-  async function fetchMe() {
-    const { data } = await api.me()
-    setMe(data)
-  }
-
   async function fetchPlaylists() {
     const { data } = await api.playlists()
     setPlaylists(data.items)
@@ -27,7 +22,7 @@ function Profile() {
   }
 
   useEffect(() => {
-    fetchMe()
+    setMe(JSON.parse(localStorage.getItem('me')))
     fetchPlaylists()
   }, [])
 
@@ -35,7 +30,7 @@ function Profile() {
     <div className="max-w-[1280px] mx-auto font-bold">
       <div className="flex justify-end">
         <div className="mr-8 mt-auto text-right">
-          <div className="text-lg font-bold">{me.display_name}</div>
+          <div className="text-lg">{me.display_name}</div>
           <a
             className="block mt-4 cursor-pointer"
             onClick={logout}
@@ -54,9 +49,9 @@ function Profile() {
       <div className="flex flex-wrap mt-6">
         {playlists.map((playlist, p) => (
           <Link
-            key={p}
             className="mb-8 w-1/2 md:w-1/4 lg:w-1/5 cursor-pointer"
             to={`/playlist/${playlist.id}`}
+            key={p}
           >
             <img
               src={playlist.images[0].url}

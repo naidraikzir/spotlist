@@ -25,7 +25,12 @@ request.interceptors.response.use(
 
 const api = {
   me: () => request.get('/me'),
-  playlists: () => request.get('/me/playlists')
+  playlists: () => request.get('/me/playlists'),
+  playlist: (id: string) => request.get(`/playlists/${id}`),
+  deletePlaylistItem: (id: string, uri: string) => request.delete(
+    `/playlists/${id}/tracks`,
+    { data: { tracks: [{ uri }] } }
+  ),
 }
 
 export default api

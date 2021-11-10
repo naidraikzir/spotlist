@@ -4,5 +4,6 @@ export const redirectUri = 'http://localhost:3000'
 export const scopes = [
   'user-read-private',
   'playlist-read-private',
+  'playlist-modify-public',
   'playlist-modify-private'
 ].join(' ')
