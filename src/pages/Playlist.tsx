@@ -2,52 +2,62 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import ReactModal from 'react-modal'
 import api from '@/api'
+import { Playlist, User } from '@/types'
 
-function Playlist() {
-  const me = JSON.parse(localStorage.getItem('me'))
+function PlaylistPage() {
+  const localMe = localStorage.getItem('me')
+  const me: User = localMe ? JSON.parse(localMe) : {}
   const { id } = useParams()
-  const [playlist, setPlaylist] = useState({
-    owner: {},
+  const [playlist, setPlaylist] = useState<Playlist>({
+    name: '',
+    owner: {
+      display_name: ''
+    },
     images: [],
     tracks: {
+      total: 0,
       items: []
     }
   })
   const [deletable, setDeletable] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-  const [deleteUri, setDeleteUri] = useState(null)
+  const [deleteUri, setDeleteUri] = useState('')
 
-  async function fetch() {
+  async function fetch(id: string) {
     const { data } = await api.playlist(id)
     setPlaylist(data)
     setDeletable(data.owner.id === me.id)
   }
 
   useEffect(() => {
-    fetch()
+    if (id) {
+      fetch(id)
+    }
   }, [])
 
-  function confirmDelete(uri) {
+  function confirmDelete(uri: string) {
     setIsConfirmOpen(true)
     setDeleteUri(uri)
   }
 
   function resetDelete() {
     setIsConfirmOpen(false)
-    setDeleteUri(null)
+    setDeleteUri('')
   }
 
   async function commitDelete() {
-    await api.deletePlaylistItem(id, deleteUri)
-    resetDelete()
-    fetch()
+    if (id) {
+      await api.deletePlaylistItem(id, deleteUri)
+      resetDelete()
+      fetch(id)
+    }
   }
 
   return (
     <div className="max-w-[1280px] mx-auto pb-8">
       <div className="flex">
         <img
-          src={playlist.images.length && playlist.images[0].url}
+          src={playlist.images.length ? playlist.images[0].url: undefined}
           alt={playlist.name}
           width="180"
         />
@@ -115,4 +125,4 @@ function Playlist() {
   )
 }
 
-export default Playlist
+export default PlaylistPage

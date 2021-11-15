@@ -1,11 +1,7 @@
-import { Navigate, RouteProps } from 'react-router'
+import { AppRouteProps } from '@/types'
 import Login from '@/pages/Login'
 import Profile from '@/pages/Profile'
 import Playlist from '@/pages/Playlist'
-
-export interface AppRouteProps extends RouteProps {
-  auth?: boolean
-}
 
 const routes: AppRouteProps[] = [
   {

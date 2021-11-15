@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import api from '@/api'
 import avatar from '@/avatar.png'
+import { User, Playlist } from '@/types'
 
 function Profile() {
   const navigate = useNavigate()
-  const [me, setMe] = useState({
+  const [me, setMe] = useState<User>({
+    display_name: '',
     images: []
   })
-  const [playlists, setPlaylists] = useState([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
 
   async function fetchPlaylists() {
     const { data } = await api.playlists()
@@ -22,7 +24,12 @@ function Profile() {
   }
 
   useEffect(() => {
-    setMe(JSON.parse(localStorage.getItem('me')))
+    const localMe = localStorage.getItem('me')
+
+    if (localMe) {
+      setMe(JSON.parse(localMe))
+    }
+
     fetchPlaylists()
   }, [])
 
@@ -39,7 +46,7 @@ function Profile() {
           </a>
         </div>
         <img
-          src={me.images.length ? me.images[0].url : avatar}
+          src={me.images?.length ? me.images[0].url : avatar}
           alt={me.display_name}
           width="180"
         />

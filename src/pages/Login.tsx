@@ -12,23 +12,19 @@ function Login() {
     localStorage.setItem('me', JSON.stringify(data))
   }
 
-  useEffect(async () => {
-    if (window.location.hash) {
-      const hash = window.location.hash
-        .substring(1)
-        .split('&')
-        .reduce((obj, item) => {
-          if (item) {
-            const parts = item.split('=')
-            obj[parts[0]] = decodeURIComponent(parts[1])
-          }
-          return obj
-        }, {})
+  async function goToApp(access_token: string) {
+    localStorage.setItem('access_token', access_token)
+    await fetchMe()
+    navigate('/profile')
+  }
 
-      if (hash.access_token) {
-        localStorage.setItem('access_token', hash.access_token)
-        await fetchMe()
-        navigate('/profile')
+  useEffect(() => {
+    if (window.location.hash) {
+      const hash = new URLSearchParams(window.location.hash.substring(1))
+      const access_token = hash.get('access_token')
+
+      if (access_token) {
+        goToApp(access_token)
       }
     }
   }, [])

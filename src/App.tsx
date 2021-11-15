@@ -1,10 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router'
-import routes, { AppRouteProps } from '@/routes'
+import routes from '@/routes'
+import { AppRouteProps } from '@/types'
 
-function RequireAuth({ children, auth }) {
-  return auth && !localStorage.getItem('access_token')
-    ? <Navigate to="/" />
-    : children
+function RequireAuth(props: AppRouteProps) {
+  return (
+    <>
+      {props.auth && !localStorage.getItem('access_token')
+        ? <Navigate to="/" />
+        : props.children
+      }
+    </>
+  )
 }
 
 function App() {
