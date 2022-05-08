@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import spotify from '@/spotify.png'
 import api from '@/api'
 import { authUrl, clientId, redirectUri, scopes } from '@/config'
+import spotify from '@/assets/spotify.png'
 
 function Login() {
   const navigate = useNavigate()

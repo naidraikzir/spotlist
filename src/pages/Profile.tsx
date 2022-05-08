@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import api from '@/api'
-import avatar from '@/avatar.png'
 import { User, Playlist } from '@/types'
+import avatar from '@/assets/avatar.png'
 
 function Profile() {
   const navigate = useNavigate()
