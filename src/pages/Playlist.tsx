@@ -55,14 +55,15 @@ function PlaylistPage() {
 
   return (
     <div className="max-w-[1280px] mx-auto pb-8">
-      <div className="flex">
+      <div className="text-center lg:text-left lg:flex">
         <img
+          className="inline-block"
           src={playlist.images.length ? playlist.images[0].url: undefined}
           alt={playlist.name}
           width="180"
         />
-        <div className="ml-8 mt-auto">
-          <div className="text-7xl font-bold">{playlist.name}</div>
+        <div className="ml-8 mt-4 lg:mt-auto">
+          <div className="text-2xl lg:text-6xl font-bold">{playlist.name}</div>
           <div className="mt-2">
             {playlist.owner.display_name}
             <span className="mx-4">—</span>
@@ -82,16 +83,16 @@ function PlaylistPage() {
               <div>{item.track.name}</div>
               <small>{item.track.artists.map(({ name }) => name).join(', ')}</small>
             </div>
-            <div className="ml-auto">{new Date(item.track.duration_ms).toISOString().substr(14, 5)}</div>
+            <div className="ml-auto">{new Date(item.track.duration_ms).toISOString().substring(14, 19)}</div>
             {
               deletable
                 ? <div
-                    className="w-24 text-center cursor-pointer"
+                    className="w-12 lg:w-24 text-center cursor-pointer"
                     onClick={() => confirmDelete(item.track.uri)}
                   >
                     ❌
                   </div>
-                : <div className="w-24" />
+                : <div className="w-12 lg:w-24" />
             }
           </div>
         ))}
